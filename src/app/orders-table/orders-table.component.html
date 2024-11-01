@@ -1,0 +1,70 @@
+<div>
+    <div class="card mb-3">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-2">
+                    <h1>Orders</h1>
+                </div>
+                <div class="col-8"></div>
+                <div class="col-2">
+                    <button class="btn btn-primary" (click)="goToNewOrder()" >
+                        Create a New Order
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body mb-3">
+            <div class="col-6">
+                <input type="text" 
+                       class="form-control" 
+                       placeholder="Search by customer name or email.."
+                       [(ngModel)]="searchTerm"
+                       (keyup)="filterOrders()">
+            </div>
+            <div class="col-10">
+                <hr>
+            </div>
+            <table class="table mt-3">
+                <thead>
+                    <tr>
+                        <th scope="col">Código de orden</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Productos</th>
+                        <th scope="col">Fecha de Compra</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Accion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (order of ordersList; track order.id) {
+                        <tr>
+                            <td>{{order.orderCode}}</td>
+                            <td>{{order.customerName}}</td>
+                            <td>{{order.email}}</td>
+                            <td>
+                                <ul class="list-unstyled mb-0">
+                                    @for (product of order.products; track product.productId) {
+                                        <li>
+                                            {{getProductName(product.productId)}}
+                                            @if (product.quantity > 1) {
+                                                <span class="text-muted">(x{{product.quantity}})</span>
+                                            }
+                                            <br>
+                                            <small class="text-muted">
+                                                ${{product.price.toFixed(2)}}
+                                            </small>
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                            <td>{{order.timestamp | date:'dd/MM/yyyy HH:mm'}}</td>
+                            <td>${{order.total.toFixed(2)}}</td>
+                            <td><button class="btn btn-secundary" (click)="openOrderDetailsModal(order)">Ver</button></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
